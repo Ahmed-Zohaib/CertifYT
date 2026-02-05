@@ -9,6 +9,7 @@ import VerifyPage from './pages/VerifyPage';
 import AuthPage from './pages/AuthPage';
 import { APP_NAME } from './constants';
 import { GraduationCap, Loader2 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.LANDING);
@@ -177,6 +178,9 @@ const App: React.FC = () => {
            <p className="text-slate-400 text-sm">© {new Date().getFullYear()} {APP_NAME}. Powered by Gemini API.</p>
         </div>
       </footer>
+      
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 };
