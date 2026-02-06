@@ -36,8 +36,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
 
   const handleCreateQuiz = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!videoUrl || !topic) {
-        setGenError("Please provide both the video URL and the topic.");
+    if (!videoUrl) {
+        setGenError("Please provide the video URL.");
         return;
     }
     
@@ -45,11 +45,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
     setIsGenerating(true);
 
     try {
-        const questions = await generateQuizFromTopic(topic, videoUrl);
+        // Use the service to generate questions AND get the detected topic (e.g. video title)
+        const { questions, derivedTopic } = await generateQuizFromTopic(topic, videoUrl);
+        
         const newQuiz: Quiz = {
             id: Date.now().toString(),
             videoUrl,
-            topic,
+            // Use the derived topic (Video Title) if the user didn't provide one
+            topic: derivedTopic,
             questions,
             createdAt: new Date().toISOString()
         };
@@ -95,7 +98,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
                     
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">
-                            Video Topic / Content Summary
+                            Video Topic / Content Summary <span className="text-slate-400 font-normal">(Optional)</span>
                         </label>
                         <textarea 
                             className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] text-sm"
@@ -103,7 +106,9 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                         />
-                        <p className="text-xs text-slate-400 mt-1">Helping the AI understand the context improves quiz quality.</p>
+                        <p className="text-xs text-slate-400 mt-1">
+                            If left blank, we'll try to fetch the video title automatically.
+                        </p>
                     </div>
 
                     {genError && (
