@@ -17,6 +17,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loadingCerts, setLoadingCerts] = useState(true);
   const [viewingCert, setViewingCert] = useState<Certificate | null>(null);
+    const [activeTab, setActiveTab] = useState<'certificates' | 'answerKeys'>('certificates');
   
   // Quiz Generation State
   const [videoUrl, setVideoUrl] = useState('');
@@ -34,7 +35,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
   }, [user.id]);
 
   const isYouTubeShort = (url: string): boolean => {
-    return url.includes('youtube.com/shorts/') || url.includes('youtu.be/');
+    return url.includes('youtube.com/shorts/');
   };
 
   const handleCreateQuiz = async (e: React.FormEvent) => {
@@ -76,10 +77,28 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
       {/* Header */}
-      <div className="mb-8">
-         <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-         <p className="text-slate-500">Welcome back, {user.username}. Track your learning progress.</p>
-      </div>
+            <div className="mb-8">
+                 <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+                 <p className="text-slate-500">Welcome back, {user.username}. Track your learning progress.</p>
+            </div>
+
+            {/* Tabs */}
+            <div className="mb-6">
+                <div className="inline-flex rounded-full bg-slate-100 p-1">
+                    <button
+                        onClick={() => setActiveTab('certificates')}
+                        className={`px-4 py-2 rounded-full text-sm font-medium ${activeTab === 'certificates' ? 'bg-white shadow-sm' : 'text-slate-600'}`}
+                    >
+                        Certificates
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('answerKeys')}
+                        className={`ml-1 px-4 py-2 rounded-full text-sm font-medium ${activeTab === 'answerKeys' ? 'bg-white shadow-sm' : 'text-slate-600'}`}
+                    >
+                        Answer Keys
+                    </button>
+                </div>
+            </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          
@@ -128,40 +147,75 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
              </div>
          </div>
 
-         {/* Right Column: Certificates */}
-         <div className="lg:col-span-2 space-y-6">
-             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-blue-600" />
-                    My Certificates
-                    <span className="bg-slate-100 text-slate-600 text-xs py-0.5 px-2 rounded-full">
-                        {certificates.length}
-                    </span>
-                </h2>
-             </div>
+                 {/* Right Column: Certificates or Answer Keys */}
+                 <div className="lg:col-span-2 space-y-6">
+                         <div className="flex items-center justify-between">
+                                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                        <Award className="w-5 h-5 text-blue-600" />
+                                        {activeTab === 'certificates' ? 'My Certificates' : 'Answer Keys'}
+                                        <span className="bg-slate-100 text-slate-600 text-xs py-0.5 px-2 rounded-full">
+                                                {activeTab === 'certificates' ? certificates.length : certificates.filter(c => c.questions && c.questions.length > 0).length}
+                                        </span>
+                                </h2>
+                         </div>
 
-             {loadingCerts ? (
-                <div className="flex justify-center p-12">
-                   <Loader2 className="w-8 h-8 text-slate-300 animate-spin" />
-                </div>
-             ) : certificates.length === 0 ? (
-                 <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center">
-                     <Award className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                     <h3 className="text-slate-900 font-medium mb-1">No certificates yet</h3>
-                     <p className="text-slate-500 text-sm">Complete a quiz with 80% or higher to earn your first certificate.</p>
+                         {loadingCerts ? (
+                                <div className="flex justify-center p-12">
+                                     <Loader2 className="w-8 h-8 text-slate-300 animate-spin" />
+                                </div>
+                         ) : activeTab === 'certificates' ? (
+                                 certificates.length === 0 ? (
+                                         <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center">
+                                                 <Award className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                                                 <h3 className="text-slate-900 font-medium mb-1">No certificates yet</h3>
+                                                 <p className="text-slate-500 text-sm">Complete a quiz with 80% or higher to earn your first certificate.</p>
+                                         </div>
+                                 ) : (
+                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                 {certificates.map(cert => (
+                                                         <CertificateCard 
+                                                                key={cert.id} 
+                                                                certificate={cert} 
+                                                                onClick={() => setViewingCert(cert)} 
+                                                         />
+                                                 ))}
+                                         </div>
+                                 )
+                         ) : (
+                                 // Answer Keys tab
+                                 (() => {
+                                     const withKeys = certificates.filter(c => c.questions && c.questions.length > 0);
+                                     if (withKeys.length === 0) {
+                                         return (
+                                             <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center">
+                                                 <div className="w-12 h-12 text-slate-300 mx-auto mb-4 flex items-center justify-center">
+                                                     <svg className="w-12 h-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8.25v.008M12 12v.008M12 15.75v.008M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                                                 </div>
+                                                 <h3 className="text-slate-900 font-medium mb-1">No answer keys available</h3>
+                                                 <p className="text-slate-500 text-sm">Answer keys are available after you pass an assessment and the system saves the quiz.</p>
+                                             </div>
+                                         );
+                                     }
+
+                                     return (
+                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                             {withKeys.map(cert => (
+                                                 <div key={cert.id} className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col justify-between">
+                                                     <div>
+                                                         <h3 className="text-md font-semibold text-slate-900">{cert.topic}</h3>
+                                                         <p className="text-sm text-slate-500 mt-1">Issued on {new Date(cert.issuedAt).toLocaleDateString()}</p>
+                                                     </div>
+                                                     <div className="mt-4 flex items-center gap-2">
+                                                         <button onClick={() => setViewingCert(cert)} className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">View Answer Key</button>
+                                                         <div className="text-xs text-slate-400 font-mono">ID: {cert.id.substring(0,8)}...</div>
+                                                     </div>
+                                                 </div>
+                                             ))}
+                                         </div>
+                                     );
+                                 })()
+                         )}
                  </div>
-             ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {certificates.map(cert => (
-                         <CertificateCard 
-                            key={cert.id} 
-                            certificate={cert} 
-                            onClick={() => setViewingCert(cert)} 
-                         />
-                     ))}
-                 </div>
-             )}
-         </div>
       </div>
 
       {viewingCert && (

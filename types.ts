@@ -27,6 +27,8 @@ export interface Certificate {
   videoUrl: string;
   topic: string;
   channelName?: string;
+  questions?: QuizQuestion[];
+  userAnswers?: number[];
   score: number; // percentage
   issuedAt: string;
 }

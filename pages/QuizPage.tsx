@@ -52,15 +52,18 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
                   channelName: quiz.channelName || "Unknown Channel",
                   score: results.percentage
               });
-              await saveCertificate({
-                  userId: user.id,
-                  userName: user.username,
-                  videoUrl: quiz.videoUrl,
-                  topic: quiz.topic,
-                  channelName: quiz.channelName || "Unknown Channel",
-                  score: results.percentage
-              });
-              console.log('Certificate saved successfully!');
+                            const saved = await saveCertificate({
+                                    userId: user.id,
+                                    userName: user.username,
+                                    videoUrl: quiz.videoUrl,
+                                    topic: quiz.topic,
+                                    channelName: quiz.channelName || undefined,
+                                    questions: quiz.questions,
+                                    userAnswers: answers,
+                                    score: results.percentage
+                            });
+
+                            console.log('Certificate saved successfully!', saved);
           } catch (error) {
               console.error("Failed to save cert:", error);
               alert(`Error saving certificate: ${error}`);

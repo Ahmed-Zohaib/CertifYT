@@ -1,6 +1,6 @@
 import React from 'react';
 import { Certificate } from '../types';
-import { Award, CheckCircle2 } from 'lucide-react';
+import { Award, CheckCircle2, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 import { APP_NAME } from '../constants';
 import Button from './Button';
 
@@ -13,6 +13,8 @@ const FullCertificate: React.FC<FullCertificateProps> = ({ certificate, onClose 
   const handlePrint = () => {
     window.print();
   };
+
+  // certificate now includes server-side `questions`, `userAnswers`, and `channelName` when available
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
@@ -92,6 +94,41 @@ const FullCertificate: React.FC<FullCertificateProps> = ({ certificate, onClose 
                 <div className="mt-8 text-xs text-slate-400 font-mono">
                     Verified by {APP_NAME} Secure Verification System
                 </div>
+                {/* Render answer key when server-side data exists */}
+                {certificate.questions && certificate.questions.length > 0 && (
+                  <div className="mt-8 text-left">
+                    <div className="mb-4 flex items-center gap-3">
+                      <BookOpen className="w-5 h-5 text-blue-600" />
+                      <h4 className="text-md font-semibold">Answer Key</h4>
+                    </div>
+                    <div className="space-y-4">
+                      {certificate.questions.map((q, idx) => {
+                        const userAnswer = certificate.userAnswers?.[idx];
+                        const isCorrect = userAnswer === q.correctAnswerIndex;
+                        return (
+                          <div key={idx} className="p-3 rounded-lg border" style={{ borderColor: isCorrect ? '#10b981' : '#ef4444' }}>
+                            <p className="font-semibold mb-2">Q{idx + 1}: {q.question}</p>
+                            <div className="space-y-2">
+                              {q.options.map((opt, optIdx) => {
+                                const correctOpt = optIdx === q.correctAnswerIndex;
+                                const picked = optIdx === userAnswer;
+                                return (
+                                  <div key={optIdx} className={`p-2 rounded ${correctOpt ? 'bg-green-50 text-green-800' : picked && !correctOpt ? 'bg-red-50 text-red-800' : 'bg-slate-50 text-slate-700'}`}>
+                                    <div className="flex items-center gap-2">
+                                      {correctOpt && <CheckCircle className="w-4 h-4" />}
+                                      {picked && !correctOpt && <XCircle className="w-4 h-4" />}
+                                      <span>{opt}</span>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
             </div>
         </div>
 
