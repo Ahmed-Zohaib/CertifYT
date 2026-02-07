@@ -31,6 +31,26 @@ const fetchTranscript = async (url: string): Promise<string> => {
 };
 
 /**
+ * Helper: Fetches video metadata (title and channel name) using noembed.
+ */
+const fetchVideoMetadata = async (url: string): Promise<{ title: string, channelName: string }> => {
+  try {
+    const response = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
+    const data = await response.json();
+    return {
+      title: data.title || "",
+      channelName: data.author_name || ""
+    };
+  } catch (error) {
+    console.warn("Failed to fetch video metadata", error);
+    return {
+      title: "",
+      channelName: ""
+    };
+  }
+};
+
+/**
  * Helper: Fetches video title using noembed (Fallback method).
  */
 const fetchVideoTitle = async (url: string): Promise<string> => {
@@ -45,7 +65,7 @@ const fetchVideoTitle = async (url: string): Promise<string> => {
   }
 };
 
-export const generateQuizFromTopic = async (videoUrl: string): Promise<{ questions: QuizQuestion[], derivedTopic: string }> => {
+export const generateQuizFromTopic = async (videoUrl: string): Promise<{ questions: QuizQuestion[], derivedTopic: string, channelName: string }> => {
   if (!ai) {
       throw new Error("Gemini API Key is missing. Please check your app configuration.");
   }
@@ -54,12 +74,15 @@ export const generateQuizFromTopic = async (videoUrl: string): Promise<{ questio
     // 1. GATHER CONTEXT (Try Transcript -> Fallback to Title)
     let transcript = "";
     let derivedTopic = "";
+    let channelName = "";
 
     if (videoUrl) {
       transcript = await fetchTranscript(videoUrl);
       
-      // Try to fetch the title for metadata purposes
-      derivedTopic = await fetchVideoTitle(videoUrl);
+      // Try to fetch the metadata (title and channel name)
+      const videoData = await fetchVideoMetadata(videoUrl);
+      derivedTopic = videoData.title;
+      channelName = videoData.channelName;
     }
 
     // 2. CONSTRUCT THE PROMPT
@@ -128,7 +151,8 @@ export const generateQuizFromTopic = async (videoUrl: string): Promise<{ questio
     
     return {
         questions: quizData,
-        derivedTopic: derivedTopic || "Video Assessment"
+        derivedTopic: derivedTopic || "Video Assessment",
+        channelName: channelName || "Unknown Channel"
     };
 
   } catch (error) {

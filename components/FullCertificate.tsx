@@ -53,6 +53,11 @@ const FullCertificate: React.FC<FullCertificateProps> = ({ certificate, onClose 
                     <p className="text-2xl font-bold text-slate-800 max-w-2xl mx-auto leading-relaxed">
                         "{certificate.topic}"
                     </p>
+                    {certificate.channelName && (
+                      <p className="text-slate-500 text-sm mt-4">
+                        From: <span className="font-semibold text-slate-700">{certificate.channelName}</span>
+                      </p>
+                    )}
                     <p className="text-slate-500 text-sm mt-4">
                         Based on content from the video source provided.
                     </p>

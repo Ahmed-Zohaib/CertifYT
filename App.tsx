@@ -105,6 +105,7 @@ const App: React.FC = () => {
         }
         return (
           <DashboardPage 
+            key={currentQuiz ? 'quiz-active' : 'quiz-inactive'}
             user={currentUser} 
             onStartQuiz={handleQuizStart}
           />

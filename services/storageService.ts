@@ -18,6 +18,7 @@ const mapCertificate = (row: any): Certificate => ({
   userName: row.user_name,
   videoUrl: row.video_url,
   topic: row.topic,
+  channelName: row.channel_name,
   score: row.score,
   issuedAt: row.issued_at
 });
@@ -79,6 +80,8 @@ export const saveCertificate = async (cert: Omit<Certificate, 'id' | 'issuedAt'>
     score: cert.score
   };
 
+  console.log('Attempting to save certificate with payload:', dbPayload);
+
   const { data, error } = await supabase
     .from('certificates')
     .insert([dbPayload])
@@ -86,10 +89,14 @@ export const saveCertificate = async (cert: Omit<Certificate, 'id' | 'issuedAt'>
     .single();
 
   if (error) {
-    console.error("Save Cert Error", error);
-    throw new Error("Failed to save certificate");
+    console.error("Save Cert Error - Code:", error.code);
+    console.error("Save Cert Error - Message:", error.message);
+    console.error("Save Cert Error - Details:", error.details);
+    console.error("Full error object:", error);
+    throw new Error(`Failed to save certificate: ${error.message}`);
   }
   
+  console.log('Certificate saved successfully:', data);
   return mapCertificate(data);
 };
 

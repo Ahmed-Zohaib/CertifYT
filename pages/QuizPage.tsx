@@ -3,7 +3,7 @@ import { Quiz, User } from '../types';
 import { saveCertificate } from '../services/storageService';
 import Button from '../components/Button';
 import { PASSING_SCORE } from '../constants';
-import { CheckCircle2, XCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Loader2, BookOpen } from 'lucide-react';
 
 interface QuizPageProps {
   quiz: Quiz;
@@ -17,6 +17,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
   const [answers, setAnswers] = useState<number[]>(new Array(quiz.questions.length).fill(-1));
   const [showResults, setShowResults] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showAnswerKey, setShowAnswerKey] = useState(false);
 
   const handleAnswer = (optionIndex: number) => {
     const newAnswers = [...answers];
@@ -43,15 +44,26 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
       if (results.percentage >= PASSING_SCORE) {
           setIsSaving(true);
           try {
+              console.log('Saving certificate with data:', {
+                  userId: user.id,
+                  userName: user.username,
+                  videoUrl: quiz.videoUrl,
+                  topic: quiz.topic,
+                  channelName: quiz.channelName || "Unknown Channel",
+                  score: results.percentage
+              });
               await saveCertificate({
                   userId: user.id,
                   userName: user.username,
                   videoUrl: quiz.videoUrl,
                   topic: quiz.topic,
+                  channelName: quiz.channelName || "Unknown Channel",
                   score: results.percentage
               });
+              console.log('Certificate saved successfully!');
           } catch (error) {
-              console.error("Failed to save cert", error);
+              console.error("Failed to save cert:", error);
+              alert(`Error saving certificate: ${error}`);
               // In production we might show an error toast here
           } finally {
               setIsSaving(false);
@@ -64,32 +76,94 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
       const passed = results.percentage >= PASSING_SCORE;
 
       return (
-          <div className="max-w-2xl mx-auto px-4 py-12">
-              <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 text-center">
-                  <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6 ${passed ? 'bg-green-100' : 'bg-red-100'}`}>
-                      {passed ? (
-                          <CheckCircle2 className="w-10 h-10 text-green-600" />
-                      ) : (
-                          <XCircle className="w-10 h-10 text-red-600" />
-                      )}
-                  </div>
-                  
-                  <h2 className="text-3xl font-bold text-slate-900 mb-2">
-                      {passed ? 'Congratulations!' : 'Keep Trying!'}
-                  </h2>
-                  <p className="text-slate-500 mb-8">
-                      You scored <span className={`font-bold ${passed ? 'text-green-600' : 'text-red-600'}`}>{results.percentage}%</span> on the "{quiz.topic}" assessment.
-                  </p>
+          <div className="max-w-3xl mx-auto px-4 py-8">
+              <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
+                  {/* Results Header */}
+                  <div className="text-center mb-8">
+                      <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6 ${passed ? 'bg-green-100' : 'bg-red-100'}`}>
+                          {passed ? (
+                              <CheckCircle2 className="w-10 h-10 text-green-600" />
+                          ) : (
+                              <XCircle className="w-10 h-10 text-red-600" />
+                          )}
+                      </div>
+                      
+                      <h2 className="text-3xl font-bold text-slate-900 mb-2">
+                          {passed ? 'Congratulations!' : 'Keep Trying!'}
+                      </h2>
+                      <p className="text-slate-500 mb-8">
+                          You scored <span className={`font-bold ${passed ? 'text-green-600' : 'text-red-600'}`}>{results.percentage}%</span> on the "{quiz.topic}" assessment.
+                      </p>
 
-                  <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-8">
-                      <div className="bg-slate-50 p-4 rounded-xl">
-                          <p className="text-xs text-slate-400 uppercase font-bold">Correct</p>
-                          <p className="text-2xl font-bold text-slate-800">{results.correct}</p>
+                      <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-8">
+                          <div className="bg-slate-50 p-4 rounded-xl">
+                              <p className="text-xs text-slate-400 uppercase font-bold">Correct</p>
+                              <p className="text-2xl font-bold text-slate-800">{results.correct}</p>
+                          </div>
+                          <div className="bg-slate-50 p-4 rounded-xl">
+                              <p className="text-xs text-slate-400 uppercase font-bold">Total</p>
+                              <p className="text-2xl font-bold text-slate-800">{results.total}</p>
+                          </div>
                       </div>
-                      <div className="bg-slate-50 p-4 rounded-xl">
-                          <p className="text-xs text-slate-400 uppercase font-bold">Total</p>
-                          <p className="text-2xl font-bold text-slate-800">{results.total}</p>
-                      </div>
+                  </div>
+
+                  {/* Answer Key */}
+                  <div className="mb-8">
+                      <button
+                          onClick={() => setShowAnswerKey(!showAnswerKey)}
+                          className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                      >
+                          <div className="flex items-center gap-3">
+                              <BookOpen className="w-5 h-5 text-blue-600" />
+                              <span className="font-semibold text-slate-900">View Answer Key</span>
+                          </div>
+                          <span className={`transform transition-transform ${showAnswerKey ? 'rotate-180' : ''}`}>
+                              ▼
+                          </span>
+                      </button>
+
+                      {showAnswerKey && (
+                          <div className="mt-4 space-y-6 bg-slate-50 p-6 rounded-lg border border-slate-200">
+                              {quiz.questions.map((q, idx) => {
+                                  const userAnswer = answers[idx];
+                                  const isCorrect = userAnswer === q.correctAnswerIndex;
+                                  
+                                  return (
+                                      <div key={idx} className="bg-white p-4 rounded-lg border-l-4" style={{
+                                          borderColor: isCorrect ? '#10b981' : '#ef4444'
+                                      }}>
+                                          <p className="font-semibold text-slate-900 mb-3">Q{idx + 1}: {q.question}</p>
+                                          
+                                          <div className="space-y-2 mb-3">
+                                              {q.options.map((option, optIdx) => {
+                                                  const isCorrectOption = optIdx === q.correctAnswerIndex;
+                                                  const isUserAnswer = optIdx === userAnswer;
+                                                  
+                                                  return (
+                                                      <div
+                                                          key={optIdx}
+                                                          className={`p-3 rounded-lg text-sm ${
+                                                              isCorrectOption
+                                                                  ? 'bg-green-50 border border-green-200 text-green-800 font-medium'
+                                                                  : isUserAnswer && !isCorrect
+                                                                  ? 'bg-red-50 border border-red-200 text-red-800'
+                                                                  : 'bg-slate-50 border border-slate-200 text-slate-600'
+                                                          }`}
+                                                      >
+                                                          <div className="flex items-center gap-2">
+                                                              {isCorrectOption && <CheckCircle2 className="w-4 h-4" />}
+                                                              {isUserAnswer && !isCorrect && <XCircle className="w-4 h-4" />}
+                                                              <span>{option}</span>
+                                                          </div>
+                                                      </div>
+                                                  );
+                                              })}
+                                          </div>
+                                      </div>
+                                  );
+                              })}
+                          </div>
+                      )}
                   </div>
 
                   {passed ? (

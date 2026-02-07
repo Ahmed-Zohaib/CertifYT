@@ -34,7 +34,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
   }, [user.id]);
 
   const isYouTubeShort = (url: string): boolean => {
-    return url.includes('youtube.com/shorts/');
+    return url.includes('youtube.com/shorts/') || url.includes('youtu.be/');
   };
 
   const handleCreateQuiz = async (e: React.FormEvent) => {
@@ -53,13 +53,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ user, onStartQuiz }) => {
     setIsGenerating(true);
 
     try {
-        // Use the service to generate questions AND get the detected topic (e.g. video title)
-        const { questions, derivedTopic } = await generateQuizFromTopic(videoUrl);
+        // Use the service to generate questions AND get the detected topic and channel name
+        const { questions, derivedTopic, channelName } = await generateQuizFromTopic(videoUrl);
         
         const newQuiz: Quiz = {
             id: Date.now().toString(),
             videoUrl,
             topic: derivedTopic,
+            channelName,
             questions,
             createdAt: new Date().toISOString()
         };
