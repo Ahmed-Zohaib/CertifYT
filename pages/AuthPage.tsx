@@ -3,7 +3,8 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { loginUser, registerUser } from '../services/storageService';
 import { User } from '../types';
-import { Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Sparkles, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 interface AuthPageProps {
   mode: 'login' | 'register';
@@ -26,6 +27,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onToggleMode, onBa
     setIsLoading(true);
 
     try {
+        let user: User;
         if (mode === 'register') {
           if (!username || !email || !password) throw new Error("All fields are required");
           
@@ -84,34 +86,67 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onToggleMode, onBa
     );
   }
 
-  // View: Login / Register Form
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
-       <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-slate-100">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">
-              {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+    <div className="relative min-h-screen flex items-center justify-center bg-[#0a0a0c] text-white p-4 overflow-hidden">
+      
+      {/* Leonardo-style Animated Background Auras */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full"
+        />
+      </div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 w-full max-w-md"
+      >
+        <div className="bg-[#16161a]/80 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl">
+          
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-6">
+                <Sparkles className="w-6 h-6 text-purple-400" />
+            </div>
+            <h2 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+              {mode === 'login' ? 'Welcome Back' : 'Join the Future'}
             </h2>
-            <p className="text-slate-500 mt-2">
-              {mode === 'login' ? 'Enter your details to access your certificates.' : 'Start your learning journey today.'}
+            <p className="text-slate-500 mt-3 text-sm font-medium uppercase tracking-wider">
+              {mode === 'login' ? 'Access your AI certificates' : 'Start your journey today'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-             {mode === 'register' && (
-               <Input 
-                 label="Username" 
-                 placeholder="johndoe"
-                 value={username}
-                 onChange={e => setUsername(e.target.value)}
-               />
-             )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+             <AnimatePresence mode='wait'>
+               {mode === 'register' && (
+                 <motion.div
+                   initial={{ opacity: 0, height: 0 }}
+                   animate={{ opacity: 1, height: 'auto' }}
+                   exit={{ opacity: 0, height: 0 }}
+                 >
+                    <Input 
+                      label="Username" 
+                      placeholder="Enter a username"
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
+                      className="py-4"
+                    />
+                 </motion.div>
+               )}
+             </AnimatePresence>
+
              <Input 
                  label="Email Address" 
                  type="email"
-                 placeholder="john@example.com"
+                 placeholder="name@company.com"
                  value={email}
                  onChange={e => setEmail(e.target.value)}
+                 className="py-4"
              />
              <Input 
                  label="Password" 
@@ -119,41 +154,51 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onToggleMode, onBa
                  placeholder="••••••••"
                  value={password}
                  onChange={e => setPassword(e.target.value)}
+                 className="py-4"
              />
 
              {error && (
-               <div className={`p-3 text-sm rounded-lg border flex items-start gap-2 ${error.includes("verify") ? "bg-yellow-50 border-yellow-200 text-yellow-800" : "bg-red-50 border-red-100 text-red-600"}`}>
-                 {error.includes("verify") && <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />}
+               <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-4 bg-red-500/10 text-red-400 text-xs rounded-xl border border-red-500/20 flex items-center gap-2"
+               >
+                 <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
                  {error}
-               </div>
+               </motion.div>
              )}
 
-             <Button type="submit" className="w-full" isLoading={isLoading}>
-               {mode === 'login' ? 'Sign In' : 'Sign Up'}
+             <Button 
+                type="submit" 
+                className="w-full py-8 text-lg" 
+                isLoading={isLoading}
+                variant="primary"
+             >
+               {mode === 'login' ? 'Sign In' : 'Create Account'}
              </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm">
-             <span className="text-slate-500">
-               {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
-             </span>
+          {/* Footer Navigation */}
+          <div className="mt-8 text-center">
              <button 
-               onClick={() => {
-                   onToggleMode();
-                   setError('');
-               }}
-               className="font-medium text-blue-600 hover:text-blue-800"
+               onClick={onToggleMode}
+               className="text-sm font-semibold text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-2 mx-auto"
              >
-               {mode === 'login' ? 'Sign Up' : 'Sign In'}
+               {mode === 'login' ? "New here? Create account" : "Already a member? Sign in"}
              </button>
           </div>
           
-          <div className="mt-4 text-center">
-            <button onClick={onBack} className="text-xs text-slate-400 hover:text-slate-600">
-                Back to Home
+          <div className="mt-6 pt-6 border-t border-white/5 text-center">
+            <button 
+              onClick={onBack} 
+              className="group inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-purple-400 transition-all uppercase tracking-widest"
+            >
+              <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" />
+              Return to Entrance
             </button>
           </div>
-       </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

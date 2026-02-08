@@ -50,21 +50,6 @@ const fetchVideoMetadata = async (url: string): Promise<{ title: string, channel
   }
 };
 
-/**
- * Helper: Fetches video title using noembed (Fallback method).
- */
-const fetchVideoTitle = async (url: string): Promise<string> => {
-  try {
-    // Removed 'callback' param to ensure we get pure JSON, not JSONP
-    const response = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
-    const data = await response.json();
-    return data.title || "";
-  } catch (error) {
-    console.warn("Failed to fetch video title", error);
-    return "";
-  }
-};
-
 export const generateQuizFromTopic = async (videoUrl: string): Promise<{ questions: QuizQuestion[], derivedTopic: string, channelName: string }> => {
   if (!ai) {
       throw new Error("Gemini API Key is missing. Please check your app configuration.");
