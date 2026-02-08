@@ -227,7 +227,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
              <div className="w-14 h-14 bg-cyan-500/10 rounded-[20px] flex items-center justify-center border border-cyan-500/30">
                 <Trophy className="w-7 h-7 text-cyan-400" />
              </div>
-             <span className="text-4xl font-black tracking-tighter uppercase italic">CertifYT</span>
+             <span className="text-4xl font-black tracking-tighter uppercase">CertifYT</span>
           </div>
 
           <div className="w-full pt-16 border-t border-slate-800/50">

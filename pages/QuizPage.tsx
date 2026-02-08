@@ -209,7 +209,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
               </div>
               
               <h2 className="text-5xl font-black mb-6 uppercase italic tracking-tighter text-white relative z-10">
-                {results.percentage >= PASSING_SCORE ? 'SYNAPSE COMPLETE' : 'Failed'}
+                {results.percentage >= PASSING_SCORE ? 'ASSESSMENT COMPLETE' : 'Failed'}
               </h2>
               
               <p className="text-purple-200/50 mb-12 font-bold tracking-widest uppercase text-xs relative z-10">
@@ -218,11 +218,11 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
 
               <div className="grid grid-cols-2 gap-6 mb-12 relative z-10">
                 <div className="bg-white/5 p-8 rounded-[2.5rem] border border-white/5 backdrop-blur-sm">
-                  <p className="text-[10px] text-purple-400/50 uppercase font-black tracking-[0.3em] mb-2">Pillars Mastered</p>
+                  <p className="text-[10px] text-purple-400/50 uppercase font-black tracking-[0.3em] mb-2">Correct Answers</p>
                   <p className="text-4xl font-black text-white">{results.correct}<span className="text-lg text-slate-600">/{results.total}</span></p>
                 </div>
                 <div className="bg-white/5 p-8 rounded-[2.5rem] border border-white/5 backdrop-blur-sm">
-                  <p className="text-[10px] text-purple-400/50 uppercase font-black tracking-[0.3em] mb-2">Protocol Status</p>
+                  <p className="text-[10px] text-purple-400/50 uppercase font-black tracking-[0.3em] mb-2">Status</p>
                   <p className={`text-3xl font-black italic ${results.percentage >= PASSING_SCORE ? 'text-fuchsia-400' : 'text-red-500'}`}>
                     {results.percentage >= PASSING_SCORE ? 'CERTIFIED' : 'RE-SYNC'}
                   </p>
@@ -238,7 +238,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
                       </div>
                     ) : (
                       <div className="py-4 px-6 bg-purple-500/10 border border-purple-500/20 rounded-2xl text-purple-300 text-[10px] font-black uppercase tracking-[0.4em]">
-                        Asset secured in neural vault
+                        Certificate saved in dashboard.
                       </div>
                     )}
                     <Button onClick={onComplete} className="w-full py-10 text-xl font-black uppercase italic bg-purple-600 hover:bg-purple-500 shadow-[0_0_50px_rgba(168,85,247,0.4)]" disabled={isSaving}>

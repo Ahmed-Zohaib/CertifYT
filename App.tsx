@@ -107,7 +107,7 @@ const App: React.FC = () => {
             <div className="bg-gradient-to-br from-purple-600 to-fuchsia-600 p-2 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-transform group-hover:scale-110">
               <GraduationCap className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-black tracking-tighter italic uppercase group-hover:text-purple-400 transition-colors">
+            <span className="text-xl font-black tracking-tighter uppercase group-hover:text-purple-400 transition-colors">
               {APP_NAME}
             </span>
           </div>

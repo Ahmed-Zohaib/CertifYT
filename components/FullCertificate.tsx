@@ -102,7 +102,7 @@ const FullCertificate = ({ certificate, onClose }) => {
               <div className="mb-10">
                 <p className="text-[10px] text-slate-400 uppercase font-bold tracking-[0.2em] mb-2">Authenticated Academic Record</p>
                 <h1 className="text-2xl font-bold text-[#1a365d] tracking-tight flex items-center gap-2">
-                   {APP_NAME} <span className="text-slate-300 font-light">|</span> <span className="text-slate-400 text-lg font-medium uppercase tracking-tighter italic">Global Scholars University</span>
+                   {APP_NAME} <span className="text-slate-300 font-light"></span>
                 </h1>
               </div>
 
@@ -140,11 +140,11 @@ const FullCertificate = ({ certificate, onClose }) => {
                 <div className="w-64">
                   <div className="pb-1 mb-2">
                     <p className="text-3xl font-bold italic text-slate-800 leading-none" style={{ fontFamily: '"Brush Script MT", cursive' }}>
-                        Dr. Jhon Doe
+                        Zohaib & Mubasher
                     </p>
                   </div>
                   <p className="text-[9px] uppercase font-bold text-slate-400 tracking-wider leading-tight">
-                    Chief Academic Officer <br /> 
+                    Team <br /> 
                     <span className="font-medium opacity-80 italic lowercase">at</span> {APP_NAME}
                   </p>
                 </div>
@@ -207,8 +207,8 @@ const FullCertificate = ({ certificate, onClose }) => {
                     Digital Verification ID
                   </p>
                   <div className="bg-white/50 backdrop-blur-sm p-2 rounded border border-slate-100">
-                    <p className="text-[9px] text-slate-700 font-bold font-mono truncate w-full tracking-tighter">
-                      ID: {displayId}
+                    <p className="text-[9px] text-slate-700 font-bold font-mono w-full tracking-tighter">
+                      {displayId}
                     </p>
                   </div>
                </div>
