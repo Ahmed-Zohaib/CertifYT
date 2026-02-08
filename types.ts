@@ -15,6 +15,7 @@ export interface Quiz {
   id: string;
   videoUrl: string;
   topic: string;
+  channelName?: string;
   questions: QuizQuestion[];
   createdAt: string;
 }
@@ -25,6 +26,9 @@ export interface Certificate {
   userName: string;
   videoUrl: string;
   topic: string;
+  channelName?: string;
+  questions?: QuizQuestion[];
+  userAnswers?: number[];
   score: number; // percentage
   issuedAt: string;
 }
