@@ -51,6 +51,9 @@ const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onComplete, onExit }) =
           userName: user.username,
           videoUrl: quiz.videoUrl,
           topic: quiz.topic,
+          channelName: quiz.channelName,
+          questions: quiz.questions,
+          userAnswers: answers,
           score: results.percentage
         });
       } catch (error) {
