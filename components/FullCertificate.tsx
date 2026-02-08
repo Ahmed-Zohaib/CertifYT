@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 // Mock types and constants since they are external in your snippet
-const APP_NAME = "CertifyTube";
+const APP_NAME = "CertifYT";
 
 const FullCertificate = ({ certificate, onClose }) => {
   const certificateRef = useRef(null);

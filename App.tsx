@@ -135,7 +135,7 @@ const App: React.FC = () => {
                     onClick={() => setAppState(AppState.LOGIN)}
                     className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all"
                   >
-                    Authorize access
+                    Welcome
                   </button>
                 )}
                </>
@@ -153,8 +153,8 @@ const App: React.FC = () => {
       <footer className="border-t border-white/5 bg-[#020105] py-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
            <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">
-             © {new Date().getFullYear()} {APP_NAME}. <span className="text-slate-800 mx-2">|</span> 
-             <span className="text-purple-500/50">Core: Gemini Neural API</span>
+             © 2026 CertifYT <span className="text-slate-800 mx-2">|</span> 
+             <span className="text-purple-500/50">Powered by Google Gemini3</span>
            </p>
 
         </div>

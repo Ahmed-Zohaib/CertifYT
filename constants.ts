@@ -1,4 +1,4 @@
-export const APP_NAME = "CertifyTube";
+export const APP_NAME = "CertifYT";
 export const PASSING_SCORE = 80;
 
 export const STORAGE_KEYS = {

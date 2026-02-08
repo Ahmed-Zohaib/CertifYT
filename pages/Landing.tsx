@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useEffect } from 'react';
 import Button from '../components/Button';
+import { Linkedin, Github, Mail, Instagram, ExternalLink } from 'lucide-react';
 import { 
   motion, 
   useScroll, 
@@ -124,24 +125,24 @@ const LandingPage: React.FC<LandingPageProps> = ({
             className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/20 mb-10 backdrop-blur-xl"
           >
             <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-cyan-200">Neural Link Established</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-cyan-200">A Project by Curious Minds</span>
           </motion.div>
           
           <h1 className="text-6xl md:text-[140px] font-black mb-10 tracking-tighter leading-[0.8] uppercase">
-            LEARN <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-purple-500">BEYOND.</span>
+            Turn Views <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-purple-500">Into Validation.</span>
           </h1>
           
           <p className="text-lg md:text-2xl text-slate-400 max-w-2xl mx-auto mb-16 leading-relaxed font-semibold">
-            The AI-first protocol for verifying digital knowledge. Stop watching, start minting your future.
+            The AI-First Protocol for verifying digital knowledge.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Button onClick={isLoggedIn ? onDashboardClick : onLoginClick} className="w-full sm:w-auto text-xl px-16 py-10 shadow-[0_0_40px_rgba(168,85,247,0.3)]">
-               {isLoggedIn ? 'Access Terminal' : 'Launch Protocol'}
+               {isLoggedIn ? 'Access Terminal' : 'Sign In'}
             </Button>
             <Button variant="secondary" onClick={onVerifyClick} className="w-full sm:w-auto text-xl px-16 py-10 border-cyan-500/20 text-cyan-400">
-              Verify Record
+              Verify
             </Button>
           </div>
         </div>
@@ -192,24 +193,24 @@ const LandingPage: React.FC<LandingPageProps> = ({
         <div className="max-w-6xl mx-auto px-6 space-y-96 relative z-10">
            <NeonRow 
              num="01" 
-             title="Initialize" 
-             desc="Connect the source link. Our AI begins the deconstruction sequence." 
+             title="Watch" 
+             desc="Watch the videos from largest open source repository - YouTube." 
              side="left" 
              glowColor="cyan"
              imgSrc="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
            />
            <NeonRow 
              num="02" 
-             title="Analyze" 
-             desc="Verify your comprehension through our proprietary stress-test environment." 
+             title="Test" 
+             desc="Pass the AI generated test related to the video." 
              side="right" 
              glowColor="purple"
              imgSrc="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
            />
            <NeonRow 
              num="03" 
-             title="Finalize" 
-             desc="Your status is updated. Professional-grade records are now available." 
+             title="Certify" 
+             desc="Get certfication to showcase your achievement." 
              side="left" 
              glowColor="emerald"
              imgSrc="https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2832&auto=format&fit=crop"
@@ -217,23 +218,60 @@ const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* NEON FOOTER */}
+{/* NEON FOOTER */}
       <footer className="py-32 border-t border-cyan-500/10 bg-[#010102] relative z-20">
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
+          
+          {/* Logo Section */}
           <div className="flex items-center gap-4 mb-16">
              <div className="w-14 h-14 bg-cyan-500/10 rounded-[20px] flex items-center justify-center border border-cyan-500/30">
                 <Trophy className="w-7 h-7 text-cyan-400" />
              </div>
-             <span className="text-4xl font-black tracking-tighter uppercase italic">CertifyTube</span>
+             <span className="text-4xl font-black tracking-tighter uppercase italic">CertifYT</span>
           </div>
-          <div className="flex flex-col md:flex-row justify-between w-full items-center gap-10">
-            <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em]">
-              © 2026 CertifyTube Neural Protocol.
-            </p>
-            <div className="flex items-center gap-5 px-8 py-4 bg-cyan-500/5 rounded-full border border-cyan-500/20">
-              <MousePointer2 className="w-4 h-4 text-cyan-400" />
-              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Designed by</span>
-              <span className="text-cyan-400 text-[10px] font-bold uppercase tracking-widest">Quantum Labs</span>
+
+          <div className="w-full pt-16 border-t border-slate-800/50">
+            {/* Left and Right Container */}
+            <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-16 md:gap-32 mb-20">
+              
+              {/* Left: Lead Architect */}
+              <div className="flex flex-col items-center md:items-start gap-4">
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em] mb-2">
+                  Mubasher Ahmed
+                </p>
+                <div className="flex items-center gap-8 text-slate-400">
+                  <a href="https://www.linkedin.com/in/-mubasher-ahmed/" className="hover:text-cyan-400 transition-all duration-300 hover:scale-110"><Linkedin size={18} /></a>
+                  <a href="https://github.com/Mubasher-Ahmed-I" className="hover:text-cyan-400 transition-all duration-300 hover:scale-110"><Github size={18} /></a>
+                  <a href="mailto:mubashirahmed7086@gmail.com" className="hover:text-cyan-400 transition-all duration-300 hover:scale-110"><Mail size={18} /></a>
+                  <a href="https://portfolio-mubasher.vercel.app/" className="hover:text-cyan-400 transition-all duration-300 hover:scale-110"><ExternalLink size={18} /></a>
+                </div>
+              </div>
+
+              {/* Right: Systems Engineer */}
+              <div className="flex flex-col items-center md:items-start gap-4">
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em] mb-2">
+                  Zohaib Ahmed
+                </p>
+                <div className="flex items-center gap-8 text-slate-400">
+                  <a href="https://www.linkedin.com/in/ahmed-zohaib" className="hover:text-purple-400 transition-all duration-300 hover:scale-110"><Linkedin size={18} /></a>
+                  <a href="https://github.com/Ahmed-Zohaib" className="hover:text-purple-400 transition-all duration-300 hover:scale-110"><Github size={18} /></a>
+                  <a href="mailto:zohaibahmed1331@gmail.com" className="hover:text-purple-400 transition-all duration-300 hover:scale-110"><Mail size={18} /></a>
+                  <a href="https://www.instagram.com/zohaibahmad1331?igsh=OGR2OGV6cXN6bmdn" className="hover:text-purple-400 transition-all duration-300 hover:scale-110"><ExternalLink size={18} /></a>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Credits */}
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex items-center gap-5 px-8 py-4 bg-cyan-500/5 rounded-full border border-cyan-500/20">
+                <MousePointer2 className="w-4 h-4 text-cyan-400" />
+                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Designed by</span>
+                <span className="text-cyan-400 text-[10px] font-bold uppercase tracking-widest">Zohaib & Mubasher</span>
+              </div>
+              <p className="text-slate-600 text-[9px] font-bold uppercase tracking-[0.3em]">
+                © 2026 CertifYT
+              </p>
             </div>
           </div>
         </div>
@@ -275,7 +313,11 @@ const NeonRow: React.FC<NeonRowProps> = ({ num, title, desc, side, glowColor, im
       className={`flex flex-col ${side === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-20`}
     >
       <div className="flex-1 text-center md:text-left">
-        <span className="text-[150px] font-black leading-none opacity-10 blur-sm">{num}</span>
+        <span className="text-[150px] font-black leading-none opacity-10 text-cyan-400 font-black text-6xl 
+  drop-shadow-[0_0_5px_#22d3ee] 
+  drop-shadow-[0_0_20px_#22d3ee] 
+  drop-shadow-[0_0_50px_#0891b2] 
+  animate-pulse">{num}</span>
         <h3 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase leading-tight">{title}</h3>
         <p className="text-slate-400 text-xl md:text-2xl leading-relaxed max-w-md font-medium">{desc}</p>
       </div>

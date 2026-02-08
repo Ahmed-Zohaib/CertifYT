@@ -38,11 +38,8 @@ const Button: React.FC<ButtonProps> = ({
         {isLoading ? (
           <Loader2 className="w-5 h-5 mr-2 animate-spin" />
         ) : (
-          <div className="flex items-center gap-2">
-            {/* ICON REMOVED FROM HERE */}
-            {children}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </div>
+          /* ArrowRight and gap div removed */
+          children
         )}
       </div>
 
